@@ -62,7 +62,6 @@ public class SaveLocation extends Fragment {
         }
         locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_TIME_BETWEEN_UPDATES, new MyLocationListener());
 
 
 
@@ -73,7 +72,9 @@ public class SaveLocation extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         button = (Button) view.findViewById(R.id.button);
-   //     locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_TIME_BETWEEN_UPDATES, new MyLocationListener());
+        location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
@@ -91,13 +92,13 @@ public class SaveLocation extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               boolean gpsEnabled= locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+               boolean gpsEnabled= locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
                 String providerName=null;
                if(gpsEnabled!=true)
                 {
                     Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(myIntent);
-                    Toast.makeText(getActivity(),"katta",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"turn on gps",Toast.LENGTH_SHORT).show();
                 }
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -121,7 +122,7 @@ public class SaveLocation extends Fragment {
 
 
                 if (location!=null) {
-
+                    System.out.println("Provider"+location.getProvider());
                     String message = String.format("Location \n Longitude: %1$s \n Latitude: %2$s", location.getLongitude(), location.getLatitude());
                     Activity activity= getActivity();
                     mCallback= (OnHeadlineSelectedListener)activity;
@@ -140,7 +141,7 @@ public class SaveLocation extends Fragment {
 
                     String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     String city = addresses.get(0).getLocality();
-                    System.out.println("address"+address+"  city  "+city);
+                    System.out.println("address" + address + "  city  " + city);
                     history.saveRecord(address, city);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
