@@ -37,7 +37,7 @@ public class FindCar extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("google.navigation:q="+Latitude+","+Longitude+"&mode=w");
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+Latitude+","+Longitude);
                 Intent mapIntent=new Intent((Intent.ACTION_VIEW),gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 if(mapIntent.resolveActivity(getActivity().getPackageManager())!=null)
