@@ -37,14 +37,19 @@ public class FindCar extends Fragment {
                 Geocoder geocoder;
                 List<Address> addresses=null;
                 geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                String address=null;
+                String city=null;
                 try {
                     addresses = geocoder.getFromLocation(Latitude,Longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                     address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                     city = addresses.get(0).getLocality();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                String city = addresses.get(0).getLocality();
-                textView.setText("Your Car is parked at:"+address+" "+city);
+                if(address==null)
+                textView.setText("Your Car is parked at: Latitude"+Latitude+" Longitude "+Longitude);
+                else
+                    textView.setText("your car is parked at "+address+ ""+city);
 
 
             }return view;

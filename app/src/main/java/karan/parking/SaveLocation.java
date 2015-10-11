@@ -3,6 +3,7 @@ package karan.parking;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -10,6 +11,8 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -137,20 +140,35 @@ public class SaveLocation extends Fragment {
                     Geocoder geocoder;
                     List<Address> addresses=null;
                     geocoder = new Geocoder(getActivity(), Locale.getDefault());
-
+                    String address=null;
+                    String city=null;
+                    int flag=1;
                     try {
                         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                         address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                         city = addresses.get(0).getLocality();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        
                     }
 
-                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                    String city = addresses.get(0).getLocality();
-                    System.out.println("address" + address + "  city  " + city);
+
                     Calendar c=Calendar.getInstance();
+                    if(address==null){
+                        textView.setText("Your Car is parked at: Latitude"+location.getLatitude()+" Longitude "+location.getLongitude());
+                        history.saveRecord(location.getLatitude()+"", location.getLongitude()+"",c.getTime());
+
+
+                    }
+                    else
+                    {
+                        textView.setText("your car is parked at "+address+ ""+city);
+                        history.saveRecord(address, city,c.getTime());
+
+                    }
+
                     history.saveRecord(address, city,c.getTime());
                     Toast.makeText(getActivity(),"car parked at "+address+" "+city,Toast.LENGTH_SHORT).show();
-                    textView.setText("Car parked at "+address+" "+city);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
