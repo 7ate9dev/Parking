@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,17 +38,33 @@ public class SaveLocation extends Fragment {
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
     LocationHistory history;
     OnHeadlineSelectedListener mCallback;
+
     public interface OnHeadlineSelectedListener {
         public void setLatitude(double Latitude);
+
         public void setLongitude(double Longitude);
     }
-
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.save_location, container, false);
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return null;
+        }
+        locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_TIME_BETWEEN_UPDATES, new MyLocationListener());
+
+
 
         return view;
     }
@@ -56,7 +73,7 @@ public class SaveLocation extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         button = (Button) view.findViewById(R.id.button);
-        locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+   //     locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
@@ -70,7 +87,7 @@ public class SaveLocation extends Fragment {
             return;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, new MyLocationListener());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +113,12 @@ public class SaveLocation extends Fragment {
                 if(locationManager==null)
                 {
                     System.out.println("Location manager is null");
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_TIME_BETWEEN_UPDATES, new MyLocationListener());
+                   // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_TIME_BETWEEN_UPDATES, new MyLocationListener());
 
                 }
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+
 
                 if (location!=null) {
 
@@ -122,8 +141,14 @@ public class SaveLocation extends Fragment {
                     String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     String city = addresses.get(0).getLocality();
                     System.out.println("address"+address+"  city  "+city);
-                    history.saveRecord(address,city);
-                    history.save();
+                    history.saveRecord(address, city);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            history.save();
+                        }
+                    });
+
                   }
                 else
                 {
