@@ -144,6 +144,7 @@ public class SaveLocation extends Fragment {
                     String city = addresses.get(0).getLocality();
                     System.out.println("address" + address + "  city  " + city);
                     history.saveRecord(address, city);
+                    Toast.makeText(getActivity(),"car parked at "+address+" "+city,Toast.LENGTH_SHORT).show();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
