@@ -9,4 +9,15 @@
         android:text="@string/go_to_car"
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView4"
+        android:layout_gravity="center_horizontal"
+
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 </LinearLayout>

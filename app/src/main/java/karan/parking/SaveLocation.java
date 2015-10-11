@@ -19,10 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.Security;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +36,7 @@ public class SaveLocation extends Fragment {
     Button button;
     LocationManager locationManager;
     Location location;
+    TextView textView;
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
     LocationHistory history;
@@ -50,6 +53,8 @@ public class SaveLocation extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.save_location, container, false);
+        textView=(TextView)view.findViewById(R.id.save);
+
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
@@ -74,7 +79,6 @@ public class SaveLocation extends Fragment {
         button = (Button) view.findViewById(R.id.button);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_TIME_BETWEEN_UPDATES, new MyLocationListener());
         location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
@@ -143,8 +147,10 @@ public class SaveLocation extends Fragment {
                     String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     String city = addresses.get(0).getLocality();
                     System.out.println("address" + address + "  city  " + city);
-                    history.saveRecord(address, city);
+                    Calendar c=Calendar.getInstance();
+                    history.saveRecord(address, city,c.getTime());
                     Toast.makeText(getActivity(),"car parked at "+address+" "+city,Toast.LENGTH_SHORT).show();
+                    textView.setText("Car parked at "+address+" "+city);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

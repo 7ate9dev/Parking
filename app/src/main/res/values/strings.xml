@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Parking</string>
 
-    <string name="title_section1">History</string>
-    <string name="title_section2">Save Location</string>
-    <string name="title_section3">Find Car</string>
+    <string name="title_section3">History</string>
+    <string name="title_section1">Save Location</string>
+    <string name="title_section2">Find Car</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -9,4 +9,14 @@
         android:text="@string/save_location"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Press button to park your car"
+        android:id="@+id/save"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    android:layout_marginTop="50dp" />
 </LinearLayout>
