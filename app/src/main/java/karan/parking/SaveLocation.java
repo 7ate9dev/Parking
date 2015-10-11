@@ -92,7 +92,8 @@ public class SaveLocation extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               boolean gpsEnabled= locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
+               boolean gpsEnabled= locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                Log.d("Gpsenabled",gpsEnabled+"");
                 String providerName=null;
                if(gpsEnabled!=true)
                 {
