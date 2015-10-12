@@ -149,26 +149,27 @@ public class SaveLocation extends Fragment {
                          city = addresses.get(0).getLocality();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        
+
                     }
 
 
                     Calendar c=Calendar.getInstance();
                     if(address==null){
                         textView.setText("Your Car is parked at: Latitude"+location.getLatitude()+" Longitude "+location.getLongitude());
-                        history.saveRecord(location.getLatitude()+"", location.getLongitude()+"",c.getTime());
+                        history.saveRecord(location.getLatitude() + "", location.getLongitude() + "", c.getTime());
+                        Toast.makeText(getActivity(),"car parked at "+location.getLatitude()+" "+location.getLongitude(),Toast.LENGTH_SHORT).show();
+
 
 
                     }
                     else
                     {
                         textView.setText("your car is parked at "+address+ ""+city);
-                        history.saveRecord(address, city,c.getTime());
+                        history.saveRecord(address, city, c.getTime());
+                        Toast.makeText(getActivity(),"car parked at "+address+" "+city,Toast.LENGTH_SHORT).show();
 
                     }
 
-                    history.saveRecord(address, city,c.getTime());
-                    Toast.makeText(getActivity(),"car parked at "+address+" "+city,Toast.LENGTH_SHORT).show();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
