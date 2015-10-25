@@ -34,7 +34,7 @@ import java.util.Locale;
 /**
  * Created by karan on 9/10/15.
  */
-public class SaveLocation extends Fragment {
+public class SaveLocation extends android.support.v4.app.Fragment {
     View view;
     Button button;
     LocationManager locationManager;

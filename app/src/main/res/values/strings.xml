@@ -14,4 +14,7 @@
     <string name="save_location">Save Location</string>
     <string name="go_to_car">Go to car</string>
     <string name="find_car"></string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

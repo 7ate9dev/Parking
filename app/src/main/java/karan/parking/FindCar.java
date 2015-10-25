@@ -20,7 +20,7 @@ import java.util.Locale;
 /**
  * Created by karan on 10/10/15.
  */
-public class FindCar extends Fragment {
+public class FindCar extends android.support.v4.app.Fragment {
     View view;
     Double Latitude=0.0,Longitude=0.0;
     Button button;
@@ -29,7 +29,7 @@ public class FindCar extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.find_car, container, false);
         TextView textView=(TextView)view.findViewById(R.id.textView4);
-            MainActivity activity=(MainActivity)getActivity();
+            Main2Activity activity=(Main2Activity)getActivity();
             Latitude = activity.getLatitude();
             Longitude =  activity.getLongitude();
             if(Latitude!=0.0)

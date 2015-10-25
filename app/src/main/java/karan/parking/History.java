@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by karan on 9/10/15.
  */
-public class History extends Fragment {
+public class History extends android.support.v4.app.Fragment {
     View view;
     RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
